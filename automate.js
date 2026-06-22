@@ -67,7 +67,8 @@ const emailValue = process.env.CONFIRMATION_EMAIL;
     }
 
     // 7. Check the Terms and Conditions Box
-    await page.click("label.mud-checkbox", { force: true });
+    // On cible le conteneur de l'icône de la checkbox sans toucher au texte et ses liens
+    await page.click("label.mud-checkbox span.mud-ripple-checkbox");
 
     // 8. Submit ("Envoyer")
     await page.click('button:has-text("Envoyer")');
