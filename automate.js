@@ -1,6 +1,12 @@
+require("dotenv").config();
 const { chromium } = require("playwright");
 
-const PORTAL_URL = "https://portal.parkon.ch/68e81677";
+// Récupérer l'URL depuis le fichier .env avec une valeur par défaut de secours
+const PORTAL_URL = process.env.PARKON_URL;
+const cantonValue = process.env.VEHICLE_CANTON;
+const plateValue = process.env.VEHICLE_PLATE;
+const durationValue = process.env.PARKING_DURATION || "4 heures";
+const emailValue = process.env.CONFIRMATION_EMAIL;
 
 (async () => {
   // Launch the browser. (Set headless: true for production background use)
@@ -31,27 +37,33 @@ const PORTAL_URL = "https://portal.parkon.ch/68e81677";
     await page.click(
       'label:has-text("Canton") + div, .mud-select:has-text("Canton") input',
     );
-    // Change "Fribourg" to your preferred canton if needed
-    await page.click('.mud-list-item:has-text("Fribourg")');
 
-    // 4. Fill License Plate ("Plaque")
-    // Change "FR123456" to your actual license plate
-    await page.fill(
-      'label:has-text("Plaque") >> xpath=../..//input',
-      "FR123456",
+    // OPTIMISATION: Attendre que les éléments de la liste apparaissent à l'écran
+    const cantonOption = page.locator(
+      `.mud-list-item:has-text("${cantonValue}")`,
     );
+    await cantonOption.waitFor({ state: "visible", timeout: 3000 });
+    await cantonOption.click();
+
+    // 4. Fill License Plate ("Plaque") - OPTIMISATION: ciblage par placeholder, beaucoup plus stable
+    await page.fill('input[placeholder="354484"]', plateValue);
 
     // 5. Select Duration Dropdown ("Durée")
     await page.click(
       'label:has-text("Durée") + div, .mud-select:has-text("Durée") input',
     );
-    // Change "4 heures" to match the exact text of the duration you need
-    await page.click('.mud-list-item:has-text("4 heures")');
+
+    // OPTIMISATION: Attendre que les éléments de la liste apparaissent à l'écran
+    const dureeOption = page.locator(
+      `.mud-list-item:has-text("${durationValue}")`,
+    );
+    await dureeOption.waitFor({ state: "visible", timeout: 3000 });
+    await dureeOption.click();
 
     // 6. Fill Optional Confirmation Email
     const emailInput = await page.$('input[placeholder="Adresse e-mail"]');
     if (emailInput) {
-      await emailInput.fill("your-email@example.com"); // Put your email here
+      await emailInput.fill(emailValue);
     }
 
     // 7. Check the Terms and Conditions Box

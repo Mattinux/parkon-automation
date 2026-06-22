@@ -1,0 +1,20 @@
+{
+  "name": "parkon-automation",
+  "version": "1.0.0",
+  "description": "Automatisation du formulaire d'enregistrement de visiteurs Parkon",
+  "main": "automate.js",
+  "scripts": {
+    "start": "node automate.js"
+  },
+  "keywords": [
+    "playwright",
+    "automation",
+    "blazor"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "playwright": "^1.49.0"
+  }
+}
