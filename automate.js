@@ -1,4 +1,6 @@
 require("dotenv").config();
+process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+
 const { chromium } = require("playwright");
 
 // Récupérer l'URL depuis le fichier .env avec une valeur par défaut de secours
@@ -10,7 +12,10 @@ const emailValue = process.env.CONFIRMATION_EMAIL;
 
 (async () => {
   // Launch the browser. (Set headless: true for production background use)
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({
+    headless: true,
+    executablePath: "/data/data/com.termux/files/usr/bin/chromium",
+  });
   const context = await browser.newContext();
   const page = await context.newPage();
 
