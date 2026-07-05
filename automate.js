@@ -17,7 +17,7 @@ const emailValue = process.env.CONFIRMATION_EMAIL;
   // Launch the browser. (Set headless: true for production background use)
   const browser = await chromium.launch({
     headless: true,
-    executablePath: "/data/data/com.termux/files/usr/bin/chromium",
+    executablePath: "/data/data/com.termux/files/usr/bin/chromium-browser",
   });
   const context = await browser.newContext();
   const page = await context.newPage();
