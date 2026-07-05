@@ -1,3 +1,6 @@
+// TRICK POUR ANDROID : On fait croire à Playwright qu'il est sur une machine Linux standard
+Object.defineProperty(process, "platform", { get: () => "linux" });
+
 require("dotenv").config();
 process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
 
